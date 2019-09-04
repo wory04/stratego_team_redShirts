@@ -8,35 +8,35 @@
 <h1>STRATEGO</h1>
 <div class="row align-items-center">
 
-<div id="game-board" class="col-7 offset-1">
-    {% for row in range(10) %}
-        <div>
-            {% for col in range(10) %}
-                <div class="game-cell dropzone" draggable="false" id="board-{{ row }}{{ col }}"></div>
+    <div id="game-board" class="col-7 offset-1" data-current-player="red">
+        {% for row in range(10) %}
+            <div>
+                {% for col in range(10) %}
+                    <div class="game-cell" id="board-{{ row }}{{ col }}"></div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="inventory" class="col-3">
+        <div id="title">BLUE INVENTORY</div>
+        <div id="blueInventory">
+            {% for soldier in army %}
+                <div class="inv-blue-cell" id="blue-{{ loop.index }}">
+                    <img class="soldier blue" id="soldier-blue-{{ loop.index }}" draggable="false" data-rank="{{ soldier }}" src="/static/images/soldier_{{ soldier }}.svg">
+                </div>
             {% endfor %}
         </div>
-    {% endfor %}
-</div>
-
-<div id="inventory" class="col-3">
-    <div id="title">BLUE INVENTORY</div>
-    <div id="blueInventory">
-        {% for soldier in army %}
-            <div class="inv-blue-cell dropzone" draggable="false" id="blue-{{ loop.index }}">
-                <div class="soldier blue {{ soldier }} hide" id="soldier-blue-{{ loop.index }}" draggable="true"><img src="/static/images/soldier_{{ soldier }}.svg"></div>
-            </div>
-        {% endfor %}
+        <br>
+        <div id="title">RED INVENTORY</div>
+        <div id="redInventory">
+            {% for soldier in army %}
+                <div class="inv-red-cell" draggable="false" id="red-{{ loop.index }}">
+                    <img class="soldier red" id="soldier-red-{{ loop.index }}" draggable="false" data-rank="{{ soldier }}" src="/static/images/soldier_{{ soldier }}.svg">
+                </div>
+            {% endfor %}
+        </div>
     </div>
-    <br>
-    <div id="title">RED INVENTORY</div>
-    <div id="redInventory">
-        {% for soldier in army %}
-            <div class="inv-red-cell dropzone" draggable="false" id="red-{{ loop.index }}">
-                <div class="soldier red {{ soldier }}" id="soldier-red-{{ loop.index }}" draggable="true"><img src="/static/images/soldier_{{ soldier }}.svg"></div>
-            </div>
-        {% endfor %}
-    </div>
-</div>
 
 </div>
 
