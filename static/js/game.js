@@ -76,20 +76,11 @@ function playGame() {
     }
 }
 
-function isValidPlayer(){
-
-}
-function isNumberOfStepsAllowed(numberOfStepsAllowed){
-
-}
-function isValidToStepOn(cell1,cell2){
-
-}
 function moveSoldier(cell1, cell2) {
     let cellToMoveFrom = document.querySelector(`[id="${cell1}"]`);
     let cellToMoveTo = document.querySelector(`[id="${cell2}"]`);
 
-    if (!String.prototype.trim) {//it help to compare innerhtml with empty string below
+    if (!String.prototype.trim) {//it help to compare innerhtml with empty string
     String.prototype.trim = function() { return this.replace(/^\s+|\s+$/, ''); };
     }
     if (cellToMoveTo.innerHTML.trim() === "") {
@@ -100,10 +91,13 @@ function moveSoldier(cell1, cell2) {
 
 function clickHandler(event) {
     let gameBoard = document.querySelector( "#game-board");
+    let player = gameBoard.dataset.currentPlayer;
     if (gameBoard.dataset.clickCounter === "0") {
-        gameBoard.dataset.clickedCell1 = event.currentTarget.id;
-        console.log("THIS IS YOUR FIRST CHOICE");//.
-        gameBoard.dataset.clickCounter = "1";
+        if(event.target.classList.contains(`${player}`)){
+            gameBoard.dataset.clickedCell1 = event.currentTarget.id;
+            console.log("THIS IS YOUR FIRST CHOICE");//.
+            gameBoard.dataset.clickCounter = "1";
+        }
     } else if (gameBoard.dataset.clickCounter === "1") {
         gameBoard.dataset.clickedCell2 = event.currentTarget.id;
         console.log("THIS IS YOUR TARGET CELL");//.
