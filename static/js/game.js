@@ -72,7 +72,30 @@ function isFull() {
     }
 }
 
+function readyPlayer(event) {
+    let currentPlayer = document.querySelector('#game-board').dataset.currentPlayer;
+    if (currentPlayer === 'red') {
+        hideImage('red');
+        document.querySelector('#game-board').dataset.currentPlayer = 'blue';
+    } else if (currentPlayer === 'blue') {
+        hideImage('blue');
+        removeDragAndDrop();
+        document.querySelector('#game-board').dataset.currentPlayer = 'red';
+    }
+}
+
+function removeDragAndDrop() {
+    document.removeEventListener('drag', drag);
+    document.removeEventListener('dragstart', drag);
+    document.removeEventListener('dragend', drag);
+    document.removeEventListener('dragover', dragover);
+    document.removeEventListener('dragenter', dragenter);
+    document.removeEventListener('dragleave', dragleave);
+    document.removeEventListener('drop', drop);
+}
+
 function setArmy() {
+    let readyButton = document.querySelector('#ready');
     document.addEventListener('drag', drag, false);
     document.addEventListener('dragstart', dragstart, false);
     document.addEventListener('dragend', dragend, false);
@@ -80,6 +103,7 @@ function setArmy() {
     document.addEventListener('dragenter', dragenter, false);
     document.addEventListener('dragleave', dragleave, false);
     document.addEventListener("drop", drop, false);
+    readyButton.addEventListener('click', readyPlayer);
 }
 
 function setBackground() {
