@@ -12,7 +12,7 @@
         {% for row in range(10) %}
             <div>
                 {% for col in range(10) %}
-                    <div class="game-cell" id="board-{{ row }}{{ col }}"></div>
+                    <div class="game-cell dropzone" id="board-{{ row }}{{ col }}"></div>
                 {% endfor %}
             </div>
         {% endfor %}
@@ -22,8 +22,8 @@
         <div id="title">BLUE INVENTORY - {{ blue_player }}</div>
         <div id="blueInventory">
             {% for soldier in army %}
-                <div class="inv-blue-cell" id="blue-{{ loop.index }}">
-                    <img class="soldier blue" id="soldier-blue-{{ loop.index }}" draggable="false" data-rank="{{ soldier }}" src="/static/images/soldier_{{ soldier }}.svg">
+                <div class="inv-blue-cell dropzone" id="blue-{{ loop.index }}">
+                    <img class="soldier blue" id="soldier-blue-{{ loop.index }}" draggable="true" data-rank="{{ soldier }}" src="/static/images/soldier_{{ soldier }}.svg" ondragstart="event.dataTransfer.setData('text/plain',null)">
                 </div>
             {% endfor %}
         </div>
@@ -31,13 +31,33 @@
         <div id="title">RED INVENTORY - {{ red_player }}</div>
         <div id="redInventory">
             {% for soldier in army %}
-                <div class="inv-red-cell" draggable="false" id="red-{{ loop.index }}">
-                    <img class="soldier red" id="soldier-red-{{ loop.index }}" draggable="false" data-rank="{{ soldier }}" src="/static/images/soldier_{{ soldier }}.svg">
+                <div class="inv-red-cell dropzone" draggable="false" id="red-{{ loop.index }}">
+                    <img class="soldier red" id="soldier-red-{{ loop.index }}" draggable="true" data-rank="{{ soldier }}" src="/static/images/soldier_{{ soldier }}.svg">
                 </div>
             {% endfor %}
         </div>
     </div>
 
+</div>
+
+<div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Your table is full</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you ready?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Let me think more</button>
+        <button type="button" class="btn btn-primary">Go on</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

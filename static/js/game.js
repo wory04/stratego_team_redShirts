@@ -17,7 +17,8 @@ function dragleave(event) {
 }
 
 function dragstart(event) {
-    if (event.target.classList.contains('soldier')) {
+    let currentPlayer = document.querySelector('#game-board').dataset.currentPlayer;
+    if (event.target.classList.contains(currentPlayer)) {
         event.target.dataset.dragged = 'true';
     }
 }
@@ -36,6 +37,8 @@ function drop(event) {
             event.preventDefault();
             dragged.parentNode.removeChild(dragged);
             event.target.appendChild(dragged);
+            if (isFull()) {
+            }
 
         }
     }
@@ -43,6 +46,18 @@ function drop(event) {
         dragged.dataset.dragged = 'false';
         dragged = null;
         event.target.dataset.dropzone = 'false';
+    }
+}
+
+function isFull() {
+    let currentPlayer = document.querySelector('#game-board').dataset.currentPlayer;
+    if (currentPlayer === 'red') {
+        for (let i = 60; i <100; i++) {
+            if (document.querySelector(`#board-${i}`).innerHTML == "") {
+                return false;
+            }
+        }
+        return true;
     }
 }
 
