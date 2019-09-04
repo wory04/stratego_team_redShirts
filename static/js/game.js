@@ -2,7 +2,7 @@ function drag(event) {
 }
 
 function dragend(event) {
-    event.target.style.opacity = "";
+    event.target.dataset.dropzone = 'false';
 }
 
 function dragover(event) {
@@ -55,7 +55,11 @@ function setArmy() {
     document.addEventListener("drop", drop, false);
 }
 
+function setBackground() {
+    document.querySelector('body').setAttribute('id', 'game');
+}
 function main() {
+    setBackground();
     setArmy();
 }
 
