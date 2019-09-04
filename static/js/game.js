@@ -38,8 +38,8 @@ function drop(event) {
             dragged.parentNode.removeChild(dragged);
             event.target.appendChild(dragged);
             if (isFull()) {
+                $('#full-board').modal('show');
             }
-
         }
     }
     if (dragged) {
@@ -52,8 +52,19 @@ function drop(event) {
 function isFull() {
     let currentPlayer = document.querySelector('#game-board').dataset.currentPlayer;
     if (currentPlayer === 'red') {
-        for (let i = 60; i <100; i++) {
+        for (let i = 60; i < 100; i++) {
             if (document.querySelector(`#board-${i}`).innerHTML == "") {
+                return false;
+            }
+        }
+        return true;
+    } else if (currentPlayer === 'blue') {
+        let blueFields = ['01', '02', '03', '04', '05', '06', '07', '08', '09'];
+        for (let i = 10; i < 40; i++) {
+            blueFields.push(i)
+        }
+        for (let field of blueFields) {
+            if (document.querySelector(`#board-${field}`).innerHTML == "") {
                 return false;
             }
         }
@@ -79,7 +90,7 @@ function setBackground() {
 
 function playGame() {
 
-    let gameBoard = document.querySelector( "#game-board");
+    let gameBoard = document.querySelector("#game-board");
     console.log(gameBoard);
     gameBoard.dataset.clickCounter = "0";
     gameBoard.dataset.clickedCell1 = "";
@@ -96,7 +107,9 @@ function moveSoldier(cell1, cell2) {
     let cellToMoveTo = document.querySelector(`[id="${cell2}"]`);
 
     if (!String.prototype.trim) {//it help to compare innerhtml with empty string
-    String.prototype.trim = function() { return this.replace(/^\s+|\s+$/, ''); };
+        String.prototype.trim = function () {
+            return this.replace(/^\s+|\s+$/, '');
+        };
     }
     if (cellToMoveTo.innerHTML.trim() === "") {
         cellToMoveTo.innerHTML = cellToMoveFrom.innerHTML;
@@ -105,7 +118,7 @@ function moveSoldier(cell1, cell2) {
 }
 
 function clickHandler(event) {
-    let gameBoard = document.querySelector( "#game-board");
+    let gameBoard = document.querySelector("#game-board");
     if (gameBoard.dataset.clickCounter === "0") {
         gameBoard.dataset.clickedCell1 = event.currentTarget.id;
         console.log("THIS IS YOUR FIRST CHOICE");//.
@@ -126,7 +139,7 @@ function hideImage(player) {
     let army = document.querySelectorAll(`.soldier.${player}`);
     for (let soldier of army) {
         soldier.classList.add('hide');
-        soldier.setAttribute('src','/static/images/stratego_logo.png' )
+        soldier.setAttribute('src', '/static/images/stratego_logo.png')
     }
 }
 
