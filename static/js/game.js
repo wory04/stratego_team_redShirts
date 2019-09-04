@@ -1,3 +1,4 @@
+//Set army______________________________________________________
 function drag(event) {
 }
 
@@ -55,6 +56,52 @@ function setArmy() {
     document.addEventListener("drop", drop, false);
 }
 
+//PlayGame__________________________________________________________________________________________________________
+
+function playGame() {
+
+    let gameBoard = document.querySelector( "#game-board");
+    console.log(gameBoard);
+    gameBoard.dataset.clickCounter = "0";
+    gameBoard.dataset.clickedCell1 = "";
+    gameBoard.dataset.clickedCell2 = "";
+
+    let boardCells = document.querySelectorAll('.game-cell ');
+    for (let cell of boardCells) {
+        cell.addEventListener('click', clickHandler);
+    }
+}
+
+function moveSoldier(cell1, cell2) {
+    let cellToMoveFrom = document.querySelector(`[id="${cell1}"]`);
+    let cellToMoveTo = document.querySelector(`[id="${cell2}"]`);
+
+    if (!String.prototype.trim) {//it help to compare innerhtml with empty string
+    String.prototype.trim = function() { return this.replace(/^\s+|\s+$/, ''); };
+    }
+    if (cellToMoveTo.innerHTML.trim() === "") {
+        cellToMoveTo.innerHTML = cellToMoveFrom.innerHTML;
+        cellToMoveFrom.innerHTML = "";
+    }
+}
+
+function clickHandler(event) {
+    let gameBoard = document.querySelector( "#game-board");
+    if (gameBoard.dataset.clickCounter === "0") {
+        gameBoard.dataset.clickedCell1 = event.currentTarget.id;
+        console.log("THIS IS YOUR FIRST CHOICE");//.
+        gameBoard.dataset.clickCounter = "1";
+    } else if (gameBoard.dataset.clickCounter === "1") {
+        gameBoard.dataset.clickedCell2 = event.currentTarget.id;
+        console.log("THIS IS YOUR TARGET CELL");//.
+        console.log(gameBoard.dataset.clickedCell1, gameBoard.dataset.clickedCell2);//.
+        moveSoldier(gameBoard.dataset.clickedCell1, gameBoard.dataset.clickedCell2);
+        gameBoard.dataset.clickCounter = "0";
+        gameBoard.dataset.clickedCell1 = "";
+        gameBoard.dataset.clickedCell2 = "";
+    }
+}
+
 // player must be a string 'red' or 'blue'
 function hideImage(player) {
     let army = document.querySelectorAll(`.soldier.${player}`);
@@ -72,8 +119,10 @@ function showImage(player) {
     }
 }
 
+//Main_____________________________________________
 function main() {
     setArmy();
+    playGame()
 }
 
 main();
