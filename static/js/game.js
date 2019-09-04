@@ -102,6 +102,23 @@ function clickHandler(event) {
     }
 }
 
+// player must be a string 'red' or 'blue'
+function hideImage(player) {
+    let army = document.querySelectorAll(`.soldier.${player}`);
+    for (let soldier of army) {
+        soldier.classList.add('hide');
+        soldier.setAttribute('src','/static/images/stratego_logo.png' )
+    }
+}
+
+function showImage(player) {
+    let army = document.querySelectorAll(`.soldier.${player}`);
+    for (let soldier of army) {
+        soldier.classList.remove('hide');
+        soldier.setAttribute('src', `/static/images/soldier_${soldier.dataset.rank}.svg`);
+    }
+}
+
 //Main_____________________________________________
 function main() {
     setArmy();
