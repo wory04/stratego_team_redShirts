@@ -1,0 +1,99 @@
+
+h1 {
+    text-align: center;
+}
+
+
+/* INVENTORY SETTINGS */
+#inventory {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.inv-blue-cell, .inv-red-cell {
+    cursor: pointer;
+    display: inline-flex;
+    width: 50px;
+    height: 50px;
+    font-size: 35px;
+    text-align: center;
+    margin: 2px;
+    vertical-align: middle;
+    border: 1px solid grey;
+    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+#inventory .soldier img {
+    height: 45px;
+    transform: translate(1px, -2px);
+}
+
+#inventory .soldier {
+    width: 45px;
+    height: 45px;
+    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+#inventory .soldier.red {
+    background-color: red;
+}
+
+#inventory .soldier.blue {
+    background-color: blue;
+}
+
+
+/* GAME BOARD SETTINGS */
+#game-board {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-cell {
+    cursor: pointer;
+    display: inline-flex;
+    width: 80px;
+    height: 80px;
+    font-size: 35px;
+    text-align: center;
+    margin: 3px;
+    color: grey;
+    vertical-align: middle;
+    background-color: #42c692;
+    border-radius: 3px;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-board .soldier img {
+    height: 75px;
+}
+
+#game-board .soldier.hide img {
+    visibility: hidden;
+}
+
+#game-board .soldier {
+    width: 70px;
+    height: 70px;
+    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-board .soldier.red {
+    background-color: red;
+}
+
+#game-board .soldier.blue {
+    background-color: blue;
+}
+

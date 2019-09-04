@@ -4,7 +4,40 @@
     <script src="{{ url_for('static', filename='js/game.js') }}" defer></script>
 {% endblock %}
 
-
 {% block content %}
+<h1>STRATEGO</h1>
+<div class="row align-items-center">
+
+<div id="game-board" class="col-7 offset-1">
+    {% for row in range(10) %}
+        <div>
+            {% for col in range(10) %}
+                <div class="game-cell" draggable="false" id="board-{{ row }}{{ col }}"></div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+
+<div id="inventory" class="col-3">
+    <div id="title">BLUE INVENTORY</div>
+    <div id="blueInventory">
+        {% for soldier in army %}
+            <div class="inv-blue-cell" draggable="false" id="blue-{{ loop.index }}">
+                <div class="soldier blue {{ soldier }} hide" id="soldier-blue-{{ loop.index }}" draggable="false"><img src="/static/images/soldier_{{ soldier }}.svg"></div>
+            </div>
+        {% endfor %}
+    </div>
+    <br>
+    <div id="title">RED INVENTORY</div>
+    <div id="redInventory">
+        {% for soldier in army %}
+            <div class="inv-red-cell" draggable="false" id="red-{{ loop.index }}">
+                <div class="soldier red {{ soldier }}" id="soldier-red-{{ loop.index }}" draggable="false"><img src="/static/images/soldier_{{ soldier }}.svg"></div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+</div>
 
 {% endblock %}
