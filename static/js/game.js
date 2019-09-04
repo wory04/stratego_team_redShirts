@@ -89,6 +89,32 @@ function moveSoldier(cell1, cell2) {
     }
 }
 
+function isSpecial(attacker, target) {
+    return (attacker === 3 && target === 11) || (attacker === 1 && target === 10)
+}
+
+
+function battle(attacker_id, target_id) {
+    const attacker = document.querySelector(`#${attacker_id}`);
+    const target = document.querySelector(`#${target_id}`);
+    const attacker_rank = parseInt(attacker.dataset.rank);
+    const target_rank = parseInt(target.dataset.rank);
+
+
+    if (target_rank === 0) {
+        return [attacker_id]
+    } else if (target_rank === attacker_rank) {
+        return [attacker_id, target_id]
+    } else if (attacker_rank > target_rank) {
+        return [attacker_id]
+    } else if (isSpecial(attacker_rank, target_rank)) {
+        return [attacker_id]
+    } else {
+        return [target_id]
+    }
+}
+
+
 function clickHandler(event) {
     let gameBoard = document.querySelector( "#game-board");
     if (gameBoard.dataset.clickCounter === "0") {
