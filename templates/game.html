@@ -19,7 +19,7 @@
     </div>
 
     <div id="inventory" class="col-3">
-        <div id="title">BLUE INVENTORY</div>
+        <div id="title">BLUE INVENTORY - {{ blue_player }}</div>
         <div id="blueInventory">
             {% for soldier in army %}
                 <div class="inv-blue-cell" id="blue-{{ loop.index }}">
@@ -28,7 +28,7 @@
             {% endfor %}
         </div>
         <br>
-        <div id="title">RED INVENTORY</div>
+        <div id="title">RED INVENTORY - {{ red_player }}</div>
         <div id="redInventory">
             {% for soldier in army %}
                 <div class="inv-red-cell" draggable="false" id="red-{{ loop.index }}">
