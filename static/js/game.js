@@ -72,11 +72,20 @@ function playGame() {
     }
 }
 
+function isValidPlayer(){
+
+}
+function isNumberOfStepsAllowed(numberOfStepsAllowed){
+
+}
+function isValidToStepOn(cell1,cell2){
+
+}
 function moveSoldier(cell1, cell2) {
     let cellToMoveFrom = document.querySelector(`[id="${cell1}"]`);
     let cellToMoveTo = document.querySelector(`[id="${cell2}"]`);
 
-    if (!String.prototype.trim) {//it help to compare innerhtml with empty string
+    if (!String.prototype.trim) {//it help to compare innerhtml with empty string below
     String.prototype.trim = function() { return this.replace(/^\s+|\s+$/, ''); };
     }
     if (cellToMoveTo.innerHTML.trim() === "") {
