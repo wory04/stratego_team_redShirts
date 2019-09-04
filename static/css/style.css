@@ -34,14 +34,9 @@ h1 {
     align-items: center;
 }
 
-#inventory .soldier img {
-    height: 45px;
-    transform: translate(1px, -2px);
-}
-
 #inventory .soldier {
-    width: 45px;
-    height: 45px;
+    height: 44px;
+    padding: 0 6px;
     border-radius: 2px;
     justify-content: center;
     align-items: center;
@@ -80,16 +75,15 @@ h1 {
     align-items: center;
 }
 
-#game-board .soldier img {
-    height: 75px;
-}
-
-#game-board .soldier.hide img {
-    visibility: hidden;
-}
-
 #game-board .soldier {
-    width: 70px;
+    height: 70px;
+    padding: 0 10px;
+    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-board .soldier.hide {
     height: 70px;
     border-radius: 2px;
     justify-content: center;
