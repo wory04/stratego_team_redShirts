@@ -1,3 +1,10 @@
+body#main {
+    background-image: url("/static/images/stratego_background.jpg");
+}
+
+body#game {
+    background: white;
+}
 
 h1 {
     text-align: center;
@@ -96,5 +103,18 @@ h1 {
 }
 
 [data-dragged=true] {
+    opacity: 0.5;
+}
+
+.players-name {
+    font-size: 18pt;
+    text-align: right;
+    vertical-align: middle;
+    padding-top: 25%;
+    padding-right: 40%;
+}
+
+input {
+    border-width: 0;
     opacity: 0.5;
 }
