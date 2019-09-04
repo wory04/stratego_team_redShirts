@@ -97,3 +97,10 @@ h1 {
     background-color: blue;
 }
 
+[data-dropzone=true] {
+    background: #d9ffb3;
+}
+
+[data-dragged=true] {
+    opacity: 0.5;
+}
