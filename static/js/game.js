@@ -172,8 +172,8 @@ function playGame() {
 function moveSoldier(cell1, cell2) {
     let gameCell1 = document.querySelector(`#${cell1}`);
     let gameCell2 = document.querySelector(`#${cell2}`);
-    if (gameCell2.innerHTML != "") {
-        console.log("LET THE BATTLE BEGIN")
+    if (gameCell2.innerHTML !== "") {
+        battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy);
     } else {
         let cellToMoveFrom = document.querySelector(`[id="${cell1}"]`);
         let cellToMoveTo = document.querySelector(`[id="${cell2}"]`);
@@ -251,8 +251,10 @@ function clickHandler(event) {
             let gameCell = document.querySelector(`#${event.currentTarget.id}`);
             gameCell.dataset.attacker = event.target.id;
             gameBoard.dataset.clickCounter = "1";
+            //markFieldsToMove()
         }
     } else if (gameBoard.dataset.clickCounter === "1") {
+        //event.currentTarget.classlist.contains('toMove')
         if (!event.target.classList.contains(`${player}`)){//cant step on your own player
             gameBoard.dataset.clickedCell2 = event.currentTarget.id;
             let gameCell = document.querySelector(`#${event.currentTarget.id}`);
@@ -263,7 +265,10 @@ function clickHandler(event) {
             gameBoard.dataset.clickedCell2 = "";
             delete gameCell.dataset.enemy;
             delete gameCell.dataset.attacker;
-            //round switch
+            //asd querySelectorAll(".moveTo"), for classlistremove moveTo
+            //const currentEnemyName = document.querySelector(`[data-${currentEnemy}]`).dataset[currentEnemy];
+            //round switch hideImage(player), querySelector("#next-player").innerHTML = `${nextplayername} is the next player`, $('#new-round').modal('show');
+            //is moveable player remained
         }
     }
 }
