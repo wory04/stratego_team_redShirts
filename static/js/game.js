@@ -203,20 +203,18 @@ function putSoldierBackToInventory (cell, player) {
         }
         if (player === "red") {
             let inventory = document.querySelectorAll(".inv-blue-cell");
-            console.log(inventory);
             for (let x of inventory) {
                 if (x.innerHTML.trim() === "") {
                     x.innerHTML = cell.innerHTML;
-                    return console.log("done")
+                    return;
                 }
             }
         } else {
             let inventory = document.querySelectorAll(".inv-red-cell");
-            console.log(inventory)
             for (let x of inventory) {
                 if (x.innerHTML.trim() === "") {
                     x.innerHTML = cell.innerHTML;
-                    return console.log("done")
+                    return;
                 }
             }
 
@@ -232,8 +230,6 @@ function moveSoldier(cellAttacker, cellEnemy) {
     if (gameCell2.innerHTML !== "") {
 
         battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy);
-        console.log(battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy));
-        console.log(cellAttacker, cellEnemy);
 
         if (battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy) === "ATTACKER"){
             let cellToMoveFrom = document.querySelector(`[id="${cellAttacker}"]`);
@@ -256,11 +252,10 @@ function moveSoldier(cellAttacker, cellEnemy) {
             cellToMoveTo.innerHTML = "";
         }
 
-        //put looser back to inventory, if draw both
     } else {
         let cellToMoveFrom = document.querySelector(`[id="${cellAttacker}"]`);
         let cellToMoveTo = document.querySelector(`[id="${cellEnemy}"]`);
-        if (!String.prototype.trim) {//it help to compare innerhtml with empty string
+        if (!String.prototype.trim) { //it help to compare innerhtml with empty string
             String.prototype.trim = function () {
                 return this.replace(/^\s+|\s+$/, '');
             };
@@ -418,7 +413,6 @@ function clickHandler(event) {
             }
         }
     } else if (gameBoard.dataset.clickCounter === "1") {
-        //event.currentTarget.classList.contains('toMove')
         if (event.currentTarget.classList.contains('moveTo')){
             gameBoard.dataset.clickedCell2 = event.currentTarget.id;
             let gameCell = document.querySelector(`#${event.currentTarget.id}`);
@@ -435,8 +429,6 @@ function clickHandler(event) {
                 cell.classList.remove('moveTo')
             }
 
-            //const currentEnemyName = document.querySelector(`[data-${currentEnemy}]`).dataset[currentEnemy];
-            //round switch hideImage(player), querySelector("#next-player").innerHTML = `${nextplayername} is the next player`, $('#new-round').modal('show');
             const currentEnemy = player === 'red' ? 'blue' : 'red';
             hideImage(player);
             document.querySelector("#next-player").innerHTML = `${currentEnemy} is the next player`;
@@ -478,7 +470,6 @@ function main() {
     setBackground();
     setLakes();
     setArmy();
-    playGame(); // KI KELL SZEDNI
 }
 
 main();
