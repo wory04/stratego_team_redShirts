@@ -42,15 +42,6 @@ h1 {
     align-items: center;
 }
 
-#inventory .soldier.red {
-    background-color: red;
-}
-
-#inventory .soldier.blue {
-    background-color: blue;
-}
-
-
 /* GAME BOARD SETTINGS */
 #game-board {
     display: inline-flex;
@@ -105,11 +96,19 @@ h1 {
     align-items: center;
 }
 
-#game-board .soldier.red {
+#battle_message .soldier {
+    height: 70px;
+    padding: 0 10px;
+    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+.soldier.red {
     background-color: red;
 }
 
-#game-board .soldier.blue {
+.soldier.blue {
     background-color: blue;
 }
 

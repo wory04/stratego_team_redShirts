@@ -189,6 +189,59 @@ function moveSoldier(cell1, cell2) {
     }
 }
 
+function isSpecial(attacker, target) {
+    return (attacker === 3 && target === 11) || (attacker === 1 && target === 10)
+}
+
+
+function battle(attacker_id, target_id) {
+    const attacker = document.querySelector(`#${attacker_id}`);
+    const target = document.querySelector(`#${target_id}`);
+    const attacker_rank = parseInt(attacker.dataset.rank);
+    const target_rank = parseInt(target.dataset.rank);
+    const currentPlayer = document.querySelector('#game-board').dataset.currentPlayer;
+    const currentEnemy = currentPlayer === 'red' ? 'blue' : 'red';
+    const currentPlayerName = document.querySelector(`[data-${currentPlayer}]`).dataset[currentPlayer];
+    const currentEnemyName = document.querySelector(`[data-${currentEnemy}]`).dataset[currentEnemy];
+
+    document.querySelector('#attacker').innerHTML = `
+    <img class='soldier ${currentPlayer}' src='/static/images/soldier_${attacker_rank}.svg'>
+    `;
+
+    document.querySelector('#target').innerHTML = `
+    <img class='soldier ${currentEnemy}' src='/static/images/soldier_${target_rank}.svg'>
+    `;
+
+
+    if (target_rank === 0) {
+        document.querySelector('#battle-result').innerHTML = `
+        Player ${currentPlayerName} WON the game!`;
+        $('#battle_message').modal('show');
+        return [attacker_id]
+    } else if (target_rank === attacker_rank) {
+        document.querySelector('#battle-result').innerHTML = `
+        It's a tie! Both player lost.`;
+        $('#battle_message').modal('show');
+        return [attacker_id, target_id]
+    } else if (attacker_rank > target_rank) {
+        document.querySelector('#battle-result').innerHTML = `
+        Player ${currentPlayerName} WON the battle!`;
+        $('#battle_message').modal('show');
+        return [attacker_id]
+    } else if (isSpecial(attacker_rank, target_rank)) {
+        document.querySelector('#battle-result').innerHTML = `
+        Player ${currentPlayerName} WON the battle!`;
+        $('#battle_message').modal('show');
+        return [attacker_id]
+    } else {
+        document.querySelector('#battle-result').innerHTML = `
+        Player ${currentEnemyName} WON battle!`;
+        $('#battle_message').modal('show');
+        return [target_id]
+    }
+}
+
+
 function clickHandler(event) {
     let gameBoard = document.querySelector("#game-board");
     let player = gameBoard.dataset.currentPlayer;
