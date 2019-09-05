@@ -18,8 +18,8 @@
     </div>
 
     <div id="inventory" class="col-3">
-        <div id="title">BLUE INVENTORY - {{ blue_player }}</div>
-        <div id="blueInventory">
+        <div id="blue_title">BLUE INVENTORY - {{ blue_player }}</div>
+        <div id="blueInventory" data-blue="{{ blue_player }}">
             {% for soldier in army %}
                 <div class="inv-blue-cell" id="blue-{{ loop.index }}">
                     <img class="soldier blue" id="soldier-blue-{{ loop.index }}" draggable="false" data-rank="{{ soldier }}" src="/static/images/soldier_{{ soldier }}.svg" ondragstart="event.dataTransfer.setData('text/plain',null)">
@@ -27,8 +27,8 @@
             {% endfor %}
         </div>
         <br>
-        <div id="title">RED INVENTORY - {{ red_player }}</div>
-        <div id="redInventory">
+        <div id="red_title">RED INVENTORY - {{ red_player }}</div>
+        <div id="redInventory" data-red="{{ red_player }}">
             {% for soldier in army %}
                 <div class="inv-red-cell" draggable="false" id="red-{{ loop.index }}">
                     <img class="soldier red" id="soldier-red-{{ loop.index }}" draggable="false" data-rank="{{ soldier }}" src="/static/images/soldier_{{ soldier }}.svg">
@@ -57,6 +57,25 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="modal" id="battle_message" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Battle</h5>
+            </div>
+            <div class="modal-body">
+                <span id="attacker"></span>
+                <span> versus </span>
+                <span id="target"></span><br>
+                <span id="battle_result"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
