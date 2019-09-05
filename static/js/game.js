@@ -71,6 +71,8 @@ function isFull() {
 }
 
 function readyPlayer(event) {
+    let nextPlayer = document.querySelector('#next-player');
+    let redPlayer = document.querySelector('#redInventory').dataset.red;
     let currentPlayer = document.querySelector('#game-board').dataset.currentPlayer;
     if (currentPlayer === 'red') {
         hideImage('red');
@@ -79,7 +81,9 @@ function readyPlayer(event) {
     } else if (currentPlayer === 'blue') {
         hideImage('blue');
         removeDragAndDrop();
-        document.querySelector('#game-board').dataset.currentPlayer = 'red';
+        playGame();
+        nextPlayer.innerHTML = `${redPlayer}'s turn!`;
+        $('#new-round').modal('show');
     }
 }
 
@@ -120,9 +124,20 @@ function enableCellToDrop() {
         }
         for (let x = 0; x < 4; x++) {
             for (let y = 0; y < 10; y++) {
-               document.querySelector(`#board-${x}${y}`).classList.add('dropzone');
+                document.querySelector(`#board-${x}${y}`).classList.add('dropzone');
             }
         }
+    }
+}
+
+function newRound() {
+    let currentPlayer = document.querySelector('#game-board').dataset.currentPlayer;
+    if (currentPlayer === 'red') {
+        showImage('blue');
+        document.querySelector('#game-board').dataset.currentPlayer = 'blue';
+    } else if (currentPlayer === 'blue') {
+        showImage('red');
+        document.querySelector('#game-board').dataset.currentPlayer = 'red';
     }
 }
 
@@ -139,6 +154,7 @@ function removeDragAndDrop() {
 function setArmy() {
     enableCellToDrop();
     let readyButton = document.querySelector('#ready');
+    let firstRound = document.querySelector('#round');
     document.addEventListener('drag', drag, false);
     document.addEventListener('dragstart', dragstart, false);
     document.addEventListener('dragend', dragend, false);
@@ -147,6 +163,7 @@ function setArmy() {
     document.addEventListener('dragleave', dragleave, false);
     document.addEventListener("drop", drop, false);
     readyButton.addEventListener('click', readyPlayer);
+    firstRound.addEventListener('click', newRound);
 }
 
 function setBackground() {
@@ -246,14 +263,14 @@ function clickHandler(event) {
     let gameBoard = document.querySelector("#game-board");
     let player = gameBoard.dataset.currentPlayer;
     if (gameBoard.dataset.clickCounter === "0") {
-        if(event.target.classList.contains(`${player}`) && event.target.dataset.rank !== "0" && event.target.dataset.rank !== "11"){// need to implement restriction to bomb and flag 0 and 11
+        if (event.target.classList.contains(`${player}`) && event.target.dataset.rank !== "0" && event.target.dataset.rank !== "11") {// need to implement restriction to bomb and flag 0 and 11
             gameBoard.dataset.clickedCell1 = event.currentTarget.id;
             let gameCell = document.querySelector(`#${event.currentTarget.id}`);
             gameCell.dataset.attacker = event.target.id;
             gameBoard.dataset.clickCounter = "1";
         }
     } else if (gameBoard.dataset.clickCounter === "1") {
-        if (!event.target.classList.contains(`${player}`)){//cant step on your own player
+        if (!event.target.classList.contains(`${player}`)) {//cant step on your own player
             gameBoard.dataset.clickedCell2 = event.currentTarget.id;
             let gameCell = document.querySelector(`#${event.currentTarget.id}`);
             gameCell.dataset.enemy = event.target.id;
@@ -299,7 +316,6 @@ function main() {
     setBackground();
     setLakes();
     setArmy();
-    playGame()
 }
 
 main();
