@@ -100,7 +100,7 @@ function clickHandler(event) {
     let gameBoard = document.querySelector( "#game-board");
     let player = gameBoard.dataset.currentPlayer;
     if (gameBoard.dataset.clickCounter === "0") {
-        if(event.target.classList.contains(`${player}`) && event.target.dataset.rank != "0" && event.target.dataset.rank != "11"){// need to implement restriction to bomb and flag 0 and 11
+        if(event.target.classList.contains(`${player}`) && event.target.dataset.rank !== "0" && event.target.dataset.rank !== "11"){// need to implement restriction to bomb and flag 0 and 11
             gameBoard.dataset.clickedCell1 = event.currentTarget.id;
             let gameCell = document.querySelector(`#${event.currentTarget.id}`);
             gameCell.dataset.attacker = event.target.id;
@@ -115,7 +115,8 @@ function clickHandler(event) {
             gameBoard.dataset.clickCounter = "0";
             gameBoard.dataset.clickedCell1 = "";
             gameBoard.dataset.clickedCell2 = "";
-            //remove attacker and enemy from cell
+            delete gameCell.dataset.enemy;
+            delete gameCell.dataset.attacker;
             //round switch
         }
     }
