@@ -59,13 +59,11 @@ function isFull() {
         }
         return true;
     } else if (currentPlayer === 'blue') {
-        let blueFields = ['01', '02', '03', '04', '05', '06', '07', '08', '09'];
-        for (let i = 10; i < 40; i++) {
-            blueFields.push(i)
-        }
-        for (let field of blueFields) {
-            if (document.querySelector(`#board-${field}`).innerHTML == "") {
-                return false;
+        for (let x = 0; x < 4; x++) {
+            for (let y = 1; y < 10; y++) {
+                if (document.querySelector(`#board-${x}${y}`).innerHTML == "") {
+                    return false;
+                }
             }
         }
         return true;
