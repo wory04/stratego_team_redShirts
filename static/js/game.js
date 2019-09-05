@@ -193,14 +193,22 @@ function playGame() {
 }
 
 function startNewRoundAfterBattle () {
-    $('#new-round').modal('show');
+    if (document.querySelector('#battle_result').innerHTML.includes('WON the game')) {
+        window.location.reload();
+    } else {
+       $('#new-round').modal('show');
+    }
 }
 function putSoldierBackToInventory (cell, player) {
+        cell.children[0].classList.remove('hide');
+        cell.children[0].setAttribute('src', `/static/images/soldier_${cell.children[0].dataset.rank}.svg`);
+
         if (!String.prototype.trim) {//it help to compare innerhtml with empty string
             String.prototype.trim = function () {
                 return this.replace(/^\s+|\s+$/, '');
             };
         }
+
         if (player === "red") {
             let inventory = document.querySelectorAll(".inv-blue-cell");
             for (let x of inventory) {
@@ -217,7 +225,6 @@ function putSoldierBackToInventory (cell, player) {
                     return;
                 }
             }
-
         }
 }
 
@@ -229,21 +236,21 @@ function moveSoldier(cellAttacker, cellEnemy) {
     const enemy = player === 'red' ? 'blue' : 'red';
     if (gameCell2.innerHTML !== "") {
 
-        battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy);
+        const battleResult = battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy);
 
-        if (battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy) === "ATTACKER"){
+        if (battleResult === "ATTACKER"){
             let cellToMoveFrom = document.querySelector(`[id="${cellAttacker}"]`);
             let cellToMoveTo = document.querySelector(`[id="${cellEnemy}"]`);
             putSoldierBackToInventory(cellToMoveTo, player);
             cellToMoveTo.innerHTML = cellToMoveFrom.innerHTML;
             cellToMoveFrom.innerHTML = "";
 
-        } else if (battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy) === "ENEMY"){
+        } else if (battleResult === "ENEMY"){
             let cellToMoveToInventory = document.querySelector(`[id="${cellAttacker}"]`);
             putSoldierBackToInventory(cellToMoveToInventory, enemy);
             cellToMoveToInventory.innerHTML = "";
 
-        } else if (battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy) === "DRAW") {
+        } else if (battleResult === "DRAW") {
             let cellToMoveFrom = document.querySelector(`[id="${cellAttacker}"]`);
             let cellToMoveTo = document.querySelector(`[id="${cellEnemy}"]`);
             putSoldierBackToInventory(cellToMoveFrom, enemy);
@@ -430,8 +437,9 @@ function clickHandler(event) {
             }
 
             const currentEnemy = player === 'red' ? 'blue' : 'red';
+            const currentEnemyName = document.querySelector(`[data-${currentEnemy}]`).dataset[currentEnemy];
             hideImage(player);
-            document.querySelector("#next-player").innerHTML = `${currentEnemy} is the next player`;
+            document.querySelector("#next-player").innerHTML = `${currentEnemyName} is the next player`;
             if (!document.querySelector('#battle_message').classList.contains('show')) {
                 $('#new-round').modal('show');
             }
