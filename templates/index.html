@@ -4,12 +4,15 @@
 <div>
     <form action="{{ url_for('game') }}" method="GET" class="players-name">
         <div>
-            <label for="red-player">Player red's name:</label>
-            <input type="text" name="red-player" id="red-player" required>
+            <img src="/static/images/stratego_banner.png" alt="banner">
         </div>
         <div>
-            <label for="blue-player">Player blue's name:</label>
-            <input type="text" name="blue-player" id="blue-player" required>
+            <label for="red-player"></label>
+            <input type="text" name="red-player" id="red-player" placeholder="Red player" required>
+        </div>
+        <div>
+            <label for="blue-player"></label>
+            <input type="text" name="blue-player" id="blue-player" placeholder="Blue player" required>
         </div>
         <div>
             <button type="submit" class="btn btn-outline-success">Start Game</button>
