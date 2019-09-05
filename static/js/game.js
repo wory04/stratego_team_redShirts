@@ -179,7 +179,6 @@ function setBackground() {
 function playGame() {
 
     let gameBoard = document.querySelector("#game-board");
-    console.log(gameBoard);
     gameBoard.dataset.clickCounter = "0";
     gameBoard.dataset.clickedCell1 = "";
     gameBoard.dataset.clickedCell2 = "";
@@ -188,6 +187,13 @@ function playGame() {
     for (let cell of boardCells) {
         cell.addEventListener('click', clickHandler);
     }
+
+    const battleOver = document.querySelector('#battle_over');
+    battleOver.addEventListener('click', startNewRoundAfterBattle)
+}
+
+function startNewRoundAfterBattle () {
+    $('#new-round').modal('show');
 }
 function putSoldierBackToInventory (cell, player) {
         if (!String.prototype.trim) {//it help to compare innerhtml with empty string
@@ -197,20 +203,18 @@ function putSoldierBackToInventory (cell, player) {
         }
         if (player === "red") {
             let inventory = document.querySelectorAll(".inv-blue-cell");
-            console.log(inventory);
             for (let x of inventory) {
                 if (x.innerHTML.trim() === "") {
                     x.innerHTML = cell.innerHTML;
-                    return console.log("done")
+                    return;
                 }
             }
         } else {
             let inventory = document.querySelectorAll(".inv-red-cell");
-            console.log(inventory)
             for (let x of inventory) {
                 if (x.innerHTML.trim() === "") {
                     x.innerHTML = cell.innerHTML;
-                    return console.log("done")
+                    return;
                 }
             }
 
@@ -226,8 +230,6 @@ function moveSoldier(cellAttacker, cellEnemy) {
     if (gameCell2.innerHTML !== "") {
 
         battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy);
-        console.log(battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy));
-        console.log(cellAttacker, cellEnemy);
 
         if (battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy) === "ATTACKER"){
             let cellToMoveFrom = document.querySelector(`[id="${cellAttacker}"]`);
@@ -250,11 +252,10 @@ function moveSoldier(cellAttacker, cellEnemy) {
             cellToMoveTo.innerHTML = "";
         }
 
-        //put looser back to inventory, if draw both
     } else {
         let cellToMoveFrom = document.querySelector(`[id="${cellAttacker}"]`);
         let cellToMoveTo = document.querySelector(`[id="${cellEnemy}"]`);
-        if (!String.prototype.trim) {//it help to compare innerhtml with empty string
+        if (!String.prototype.trim) { //it help to compare innerhtml with empty string
             String.prototype.trim = function () {
                 return this.replace(/^\s+|\s+$/, '');
             };
@@ -270,6 +271,81 @@ function isSpecial(attacker, target) {
     return (attacker === 3 && target === 11) || (attacker === 1 && target === 10)
 }
 
+function isValidMoveToCell (currentCell, currentPlayer) {
+    return currentCell && !currentCell.classList.contains('lake-cell') &&
+        ((currentCell.children.length === 0) || (currentCell.children.length !== 0 && !currentCell.children[0].classList.contains(currentPlayer)))
+}
+
+function isFirstFromEnemy (currentCell, currentPlayer) {
+    return currentCell && currentCell.children.length !== 0 && !currentCell.children[0].classList.contains(currentPlayer)
+}
+
+function markFieldsForScoutDone (currentCell, currentPlayer) {
+    if (isFirstFromEnemy(currentCell, currentPlayer)) {
+        currentCell.classList.add('moveTo');
+        return true;
+    }
+
+    if (isValidMoveToCell(currentCell, currentPlayer)) {
+        currentCell.classList.add('moveTo');
+        return false;
+    }
+    return true;
+}
+
+function markFieldsToMove () {
+    const currentPlayer = document.querySelector('#game-board').dataset.currentPlayer;
+    const currentCellId = document.querySelector('#game-board').dataset.clickedCell1;
+    const currentPlayerId = document.querySelector(`#${currentCellId}`).dataset.attacker;
+    const currentPlayerRank = document.querySelector(`#${currentPlayerId}`).dataset.rank;
+
+    const currentCellRow = parseInt(currentCellId.slice(-2, -1));
+    const currentCellCol = parseInt(currentCellId.slice(-1));
+
+    if (currentPlayerRank !== '2') {
+        const moveToCells = [`${currentCellRow - 1}${currentCellCol}`,
+                     `${currentCellRow + 1}${currentCellCol}`,
+                     `${currentCellRow}${currentCellCol - 1}`,
+                     `${currentCellRow}${currentCellCol + 1}`
+                    ];
+
+        for (let cell of moveToCells) {
+            let currentCell = document.querySelector(`#board-${cell}`);
+            if (isValidMoveToCell(currentCell, currentPlayer)) {
+                currentCell.classList.add('moveTo');
+            }
+        }
+    } else {
+        // check column up
+        for (let row = currentCellRow + 1; row < 10; row++) {
+            let currentCell = document.querySelector(`#board-${row}${currentCellCol}`);
+            if (markFieldsForScoutDone(currentCell, currentPlayer)) {
+                break
+            }
+        }
+        // check column down
+        for (let row = currentCellRow - 1; row >= 0; row--) {
+            let currentCell = document.querySelector(`#board-${row}${currentCellCol}`);
+            if (markFieldsForScoutDone(currentCell, currentPlayer)) {
+                break
+            }
+        }
+        // check row up
+        for (let col = currentCellCol + 1; col < 10; col++) {
+            let currentCell = document.querySelector(`#board-${currentCellRow}${col}`);
+            if (markFieldsForScoutDone(currentCell, currentPlayer)) {
+                break
+            }
+        }
+        // check row down
+        for (let col = currentCellCol - 1; col >= 0; col--) {
+            let currentCell = document.querySelector(`#board-${currentCellRow}${col}`);
+            if (markFieldsForScoutDone(currentCell, currentPlayer)) {
+                break
+            }
+        }
+    }
+}
 
 function battle(attacker_id, target_id) {
     const attacker = document.querySelector(`#${attacker_id}`);
@@ -288,7 +364,6 @@ function battle(attacker_id, target_id) {
     document.querySelector('#target').innerHTML = `
     <img class='soldier ${currentEnemy}' src='/static/images/soldier_${target_rank}.svg'>
     `;
-
 
     if (target_rank === 0) {
         document.querySelector('#battle_result').innerHTML = `
@@ -323,7 +398,6 @@ function battle(attacker_id, target_id) {
     }
 }
 
-
 function clickHandler(event) {
     let gameBoard = document.querySelector("#game-board");
     let player = gameBoard.dataset.currentPlayer;
@@ -333,34 +407,41 @@ function clickHandler(event) {
             let gameCell = document.querySelector(`#${event.currentTarget.id}`);
             gameCell.dataset.attacker = event.target.id;
             gameBoard.dataset.clickCounter = "1";
-            //markFieldsToMove()
+            markFieldsToMove();
+            if (document.querySelectorAll('.moveTo').length === 0) {
+                gameBoard.dataset.clickCounter = "0";
+            }
         }
     } else if (gameBoard.dataset.clickCounter === "1") {
-        //event.currentTarget.classlist.contains('toMove')
-        if (!event.target.classList.contains(`${player}`)) {
+        if (event.currentTarget.classList.contains('moveTo')){
             gameBoard.dataset.clickedCell2 = event.currentTarget.id;
             let gameCell = document.querySelector(`#${event.currentTarget.id}`);
             gameCell.dataset.enemy = event.target.id;
             moveSoldier(gameBoard.dataset.clickedCell1, gameBoard.dataset.clickedCell2);
+
             gameBoard.dataset.clickCounter = "0";
             gameBoard.dataset.clickedCell1 = "";
             gameBoard.dataset.clickedCell2 = "";
             delete gameCell.dataset.enemy;
             delete gameCell.dataset.attacker;
-            //asd querySelectorAll(".moveTo"), for classlistremove moveTo
-            //const currentEnemyName = document.querySelector(`[data-${currentEnemy}]`).dataset[currentEnemy];
-            //round switch hideImage(player), querySelector("#next-player").innerHTML = `${nextplayername} is the next player`, $('#new-round').modal('show');
+            const moveToFields = document.querySelectorAll('.moveTo');
+            for (let cell of moveToFields) {
+                cell.classList.remove('moveTo')
+            }
+
             const currentEnemy = player === 'red' ? 'blue' : 'red';
             hideImage(player);
             document.querySelector("#next-player").innerHTML = `${currentEnemy} is the next player`;
-            $('#new-round').modal('show');
+            if (!document.querySelector('#battle_message').classList.contains('show')) {
+                $('#new-round').modal('show');
+            }
         }
     }
 }
 
 // player must be a string 'red' or 'blue'
 function hideImage(player) {
-    let army = document.querySelectorAll(`.soldier.${player}`);
+    let army = document.querySelectorAll(`.game-cell .soldier.${player}`);
     for (let soldier of army) {
         soldier.classList.add('hide');
         soldier.setAttribute('src', '/static/images/stratego_logo.png')
@@ -368,7 +449,7 @@ function hideImage(player) {
 }
 
 function showImage(player) {
-    let army = document.querySelectorAll(`.soldier.${player}`);
+    let army = document.querySelectorAll(`.game-cell .soldier.${player}`);
     for (let soldier of army) {
         soldier.classList.remove('hide');
         soldier.setAttribute('src', `/static/images/soldier_${soldier.dataset.rank}.svg`);
@@ -389,7 +470,6 @@ function main() {
     setBackground();
     setLakes();
     setArmy();
-    playGame(); // KI KELL SZEDNI
 }
 
 main();
