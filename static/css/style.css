@@ -1,0 +1,134 @@
+body#main {
+    background-image: url("/static/images/stratego_background.jpg");
+}
+
+body#game {
+    background: white;
+}
+
+h1 {
+    text-align: center;
+}
+
+
+/* INVENTORY SETTINGS */
+#inventory {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.inv-blue-cell, .inv-red-cell {
+    cursor: pointer;
+    display: inline-flex;
+    width: 50px;
+    height: 50px;
+    font-size: 35px;
+    text-align: center;
+    margin: 2px;
+    vertical-align: middle;
+    border: 1px solid grey;
+    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+#inventory .soldier {
+    height: 44px;
+    padding: 0 6px;
+    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* GAME BOARD SETTINGS */
+#game-board {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-cell {
+    cursor: pointer;
+    display: inline-flex;
+    width: 80px;
+    height: 80px;
+    font-size: 35px;
+    text-align: center;
+    margin: 3px;
+    vertical-align: middle;
+    background-color: #42c692;
+    border-radius: 3px;
+    justify-content: center;
+    align-items: center;
+}
+
+.lake-cell {
+    cursor: pointer;
+    display: inline-flex;
+    width: 80px;
+    height: 80px;
+    font-size: 35px;
+    text-align: center;
+    margin: 3px;
+    vertical-align: middle;
+    border-radius: 3px;
+    justify-content: center;
+    align-items: center;
+    background-color: #3aafc7;
+}
+
+#game-board .soldier {
+    height: 70px;
+    padding: 0 10px;
+    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-board .soldier.hide {
+    height: 70px;
+    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+#battle_message .soldier {
+    height: 70px;
+    padding: 0 10px;
+    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+.soldier.red {
+    background-color: red;
+}
+
+.soldier.blue {
+    background-color: blue;
+}
+
+[data-dropzone=true] {
+    background: #d9ffb3;
+}
+
+[data-dragged=true] {
+    opacity: 0.5;
+}
+
+.players-name {
+    font-size: 18pt;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 20%;
+}
+
+input {
+    border-width: 0;
+    opacity: 0.5;
+    margin: 5px;
+    text-align: center;
+}

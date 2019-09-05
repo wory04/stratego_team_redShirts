@@ -1,10 +1,81 @@
 {% extends 'layout.html' %}
-
 {% block head %}
     <script src="{{ url_for('static', filename='js/game.js') }}" defer></script>
 {% endblock %}
 
-
 {% block content %}
+<h1>STRATEGO</h1>
+<div class="row align-items-center">
+
+    <div id="game-board" class="col-7 offset-1" data-current-player="red">
+        {% for row in range(10) %}
+            <div>
+                {% for col in range(10) %}
+                    <div class="game-cell" id="board-{{ row }}{{ col }}"></div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="inventory" class="col-3">
+        <div id="blue_title">BLUE INVENTORY - {{ blue_player }}</div>
+        <div id="blueInventory" data-blue="{{ blue_player }}">
+            {% for soldier in army %}
+                <div class="inv-blue-cell" id="blue-{{ loop.index }}">
+                    <img class="soldier blue" id="soldier-blue-{{ loop.index }}" draggable="false" data-rank="{{ soldier }}" src="/static/images/soldier_{{ soldier }}.svg" ondragstart="event.dataTransfer.setData('text/plain',null)">
+                </div>
+            {% endfor %}
+        </div>
+        <br>
+        <div id="red_title">RED INVENTORY - {{ red_player }}</div>
+        <div id="redInventory" data-red="{{ red_player }}">
+            {% for soldier in army %}
+                <div class="inv-red-cell" draggable="false" id="red-{{ loop.index }}">
+                    <img class="soldier red" id="soldier-red-{{ loop.index }}" draggable="false" data-rank="{{ soldier }}" src="/static/images/soldier_{{ soldier }}.svg">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="full-board">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Your table is full</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you ready?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Let me think more</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="ready">Go on</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="battle_message" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Battle</h5>
+            </div>
+            <div class="modal-body">
+                <span id="attacker"></span>
+                <span> versus </span>
+                <span id="target"></span><br>
+                <span id="battle_result"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
