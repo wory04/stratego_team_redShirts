@@ -139,9 +139,19 @@ function showImage(player) {
     }
 }
 
+function setLakes() {
+    const lakes = [42, 43, 46, 47, 52, 53, 56, 57];
+    for (let lake of lakes) {
+        let cell = document.querySelector(`#board-${lake}`);
+        cell.classList.add('lake-cell');
+        cell.classList.remove('game-cell');
+    }
+}
+
 //Main_____________________________________________
 function main() {
     setBackground();
+    setLakes();
     setArmy();
     playGame()
 }
