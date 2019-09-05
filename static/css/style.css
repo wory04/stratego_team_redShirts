@@ -152,3 +152,11 @@ input {
     margin: 5px;
     text-align: center;
 }
+
+.modal-body {
+    text-align: center;
+}
+
+.game-cell.dropzone {
+    border: solid 3px green;
+}

@@ -74,6 +74,7 @@ function readyPlayer(event) {
     let nextPlayer = document.querySelector('#next-player');
     let redPlayer = document.querySelector('#redInventory').dataset.red;
     let currentPlayer = document.querySelector('#game-board').dataset.currentPlayer;
+    let gameCells = document.querySelectorAll('.game-cell');
     if (currentPlayer === 'red') {
         hideImage('red');
         document.querySelector('#game-board').dataset.currentPlayer = 'blue';
@@ -81,6 +82,9 @@ function readyPlayer(event) {
     } else if (currentPlayer === 'blue') {
         hideImage('blue');
         removeDragAndDrop();
+        for (const cell of gameCells) {
+            cell.classList.remove('dropzone');
+        }
         playGame();
         nextPlayer.innerHTML = `${redPlayer}'s turn!`;
         $('#new-round').modal('show');
