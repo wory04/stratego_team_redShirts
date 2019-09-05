@@ -210,6 +210,80 @@ function isSpecial(attacker, target) {
     return (attacker === 3 && target === 11) || (attacker === 1 && target === 10)
 }
 
+function isValidMoveToCell (currentCell, currentPlayer) {
+    return currentCell &&
+        ((currentCell.children.length === 0) || (currentCell.children.length !== 0 && !currentCell.children[0].classList.contains(currentPlayer)))
+}
+
+function isFirstFromEnemy (currentCell, currentPlayer) {
+    return currentCell && currentCell.children.length !== 0 && !currentCell.children[0].classList.contains(currentPlayer)
+}
+
+function markFieldsForScoutDone (currentCell, currentPlayer) {
+    if (isValidMoveToCell(currentCell, currentPlayer)) {
+        currentCell.classList.add('moveTo');
+        return false;
+    }
+
+    if (isFirstFromEnemy(currentCell, currentPlayer)) {
+        currentCell.classList.add('moveTo');
+    }
+    return true;
+}
+
+function markFieldsToMove () {
+    const currentPlayer = document.querySelector('#game-board').dataset.currentPlayer;
+    const currentCellId = document.querySelector('#game-board').dataset.clickedCell1;
+    const currentPlayerId = document.querySelector(`#${currentCellId}`).dataset.attacker;
+    const currentPlayerRank = document.querySelector(`#${currentPlayerId}`).dataset.rank;
+
+    const currentCellRow = parseInt(currentCellId.slice(-2, -1));
+    const currentCellCol = parseInt(currentCellId.slice(-1));
+
+    if (currentPlayerRank !== '2') {
+        const moveToCells = [`${currentCellRow - 1}${currentCellCol}`,
+                     `${currentCellRow + 1}${currentCellCol}`,
+                     `${currentCellRow}${currentCellCol - 1}`,
+                     `${currentCellRow}${currentCellCol + 1}`
+                    ];
+
+        for (let cell of moveToCells) {
+            let currentCell = document.querySelector(`#board-${cell}`;
+            if (isValidMoveToCell(currentCell, currentPlayer)) {
+                currentCell.classList.add('moveTo');
+            }
+        }
+    } else {
+        // check column up
+        for (let row = currentCellRow + 1; row < 10; row++) {
+            let currentCell = document.querySelector(`#board-${row}${currentCellCol}`);
+            if (markFieldsForScoutDone(currentCell, currentPlayer)) {
+                break
+            }
+        }
+        // check column down
+        for (let row = currentCellRow - 1; row >= 0; row--) {
+            let currentCell = document.querySelector(`#board-${row}${currentCellCol}`);
+            if (markFieldsForScoutDone(currentCell, currentPlayer)) {
+                break
+            }
+        }
+        // check row up
+        for (let col = currentCellCol + 1; col < 10; col++) {
+            let currentCell = document.querySelector(`#board-${currentCellRow}${col}`);
+            if (markFieldsForScoutDone(currentCell, currentPlayer)) {
+                break
+            }
+        }
+        // check row down
+        for (let col = currentCellCol - 1; col >= 0; col--) {
+            let currentCell = document.querySelector(`#board-${currentCellRow}${col}`);
+            if (markFieldsForScoutDone(currentCell, currentPlayer)) {
+                break
+            }
+        }
+    }
+}
 
 function battle(attacker_id, target_id) {
     const attacker = document.querySelector(`#${attacker_id}`);
@@ -228,7 +302,6 @@ function battle(attacker_id, target_id) {
     document.querySelector('#target').innerHTML = `
     <img class='soldier ${currentEnemy}' src='/static/images/soldier_${target_rank}.svg'>
     `;
-
 
     if (target_rank === 0) {
         document.querySelector('#battle-result').innerHTML = `
@@ -257,7 +330,6 @@ function battle(attacker_id, target_id) {
         return [target_id]
     }
 }
-
 
 function clickHandler(event) {
     let gameBoard = document.querySelector("#game-board");
