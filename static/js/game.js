@@ -179,7 +179,6 @@ function setBackground() {
 function playGame() {
 
     let gameBoard = document.querySelector("#game-board");
-    console.log(gameBoard);
     gameBoard.dataset.clickCounter = "0";
     gameBoard.dataset.clickedCell1 = "";
     gameBoard.dataset.clickedCell2 = "";
@@ -227,13 +226,14 @@ function isFirstFromEnemy (currentCell, currentPlayer) {
 }
 
 function markFieldsForScoutDone (currentCell, currentPlayer) {
+    if (isFirstFromEnemy(currentCell, currentPlayer)) {
+        currentCell.classList.add('moveTo');
+        return true;
+    }
+
     if (isValidMoveToCell(currentCell, currentPlayer)) {
         currentCell.classList.add('moveTo');
         return false;
-    }
-
-    if (isFirstFromEnemy(currentCell, currentPlayer)) {
-        currentCell.classList.add('moveTo');
     }
     return true;
 }
@@ -348,6 +348,9 @@ function clickHandler(event) {
             gameCell.dataset.attacker = event.target.id;
             gameBoard.dataset.clickCounter = "1";
             markFieldsToMove();
+            if (document.querySelectorAll('.moveTo').length === 0) {
+                gameBoard.dataset.clickCounter = "0";
+            }
         }
     } else if (gameBoard.dataset.clickCounter === "1") {
         //event.currentTarget.classList.contains('toMove')
