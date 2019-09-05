@@ -60,7 +60,7 @@ function isFull() {
         return true;
     } else if (currentPlayer === 'blue') {
         for (let x = 0; x < 4; x++) {
-            for (let y = 1; y < 10; y++) {
+            for (let y = 0; y < 10; y++) {
                 if (document.querySelector(`#board-${x}${y}`).innerHTML == "") {
                     return false;
                 }
@@ -75,10 +75,54 @@ function readyPlayer(event) {
     if (currentPlayer === 'red') {
         hideImage('red');
         document.querySelector('#game-board').dataset.currentPlayer = 'blue';
+        enableCellToDrop();
     } else if (currentPlayer === 'blue') {
         hideImage('blue');
         removeDragAndDrop();
         document.querySelector('#game-board').dataset.currentPlayer = 'red';
+    }
+}
+
+function enableCellToDrop() {
+    let currentPlayer = document.querySelector('#game-board').dataset.currentPlayer;
+    if (currentPlayer === 'red') {
+        let redInventory = document.querySelectorAll('.inv-red-cell');
+        for (const cell of redInventory) {
+            cell.classList.add('dropzone');
+        }
+        let redSoldiers = document.querySelectorAll('.soldier.red');
+        for (const soldier of redSoldiers) {
+            soldier.setAttribute('draggable', 'true');
+        }
+        for (let i = 60; i < 100; i++) {
+            document.querySelector(`#board-${i}`).classList.add('dropzone');
+        }
+    } else if (currentPlayer === 'blue') {
+        let gameCells = document.querySelectorAll('.game-cell');
+        for (const cell of gameCells) {
+            cell.classList.remove('dropzone');
+        }
+        let redSoldiers = document.querySelectorAll('.soldier.red');
+        for (const soldier of redSoldiers) {
+            soldier.setAttribute('draggable', 'false');
+        }
+        let blueSoldiers = document.querySelectorAll('.soldier.blue');
+        for (const soldier of blueSoldiers) {
+            soldier.setAttribute('draggable', 'true');
+        }
+        let redInventory = document.querySelectorAll('.inv-red-cell');
+        for (const cell of redInventory) {
+            cell.classList.remove('dropzone');
+        }
+        let blueInventory = document.querySelectorAll('.inv-blue-cell');
+        for (const cell of blueInventory) {
+            cell.classList.add('dropzone');
+        }
+        for (let x = 0; x < 4; x++) {
+            for (let y = 0; y < 10; y++) {
+               document.querySelector(`#board-${x}${y}`).classList.add('dropzone');
+            }
+        }
     }
 }
 
@@ -93,6 +137,7 @@ function removeDragAndDrop() {
 }
 
 function setArmy() {
+    enableCellToDrop();
     let readyButton = document.querySelector('#ready');
     document.addEventListener('drag', drag, false);
     document.addEventListener('dragstart', dragstart, false);
