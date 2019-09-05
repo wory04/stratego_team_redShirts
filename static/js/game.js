@@ -187,6 +187,13 @@ function playGame() {
     for (let cell of boardCells) {
         cell.addEventListener('click', clickHandler);
     }
+
+    const battleOver = document.querySelector('#battle_over');
+    battleOver.addEventListener('click', startNewRoundAfterBattle)
+}
+
+function startNewRoundAfterBattle () {
+    $('#new-round').modal('show');
 }
 
 function moveSoldier(cell1, cell2) {
@@ -375,14 +382,16 @@ function clickHandler(event) {
             const currentEnemy = player === 'red' ? 'blue' : 'red';
             hideImage(player);
             document.querySelector("#next-player").innerHTML = `${currentEnemy} is the next player`;
-            $('#new-round').modal('show');
+            if (!document.querySelector('#battle_message').classList.contains('show')) {
+                $('#new-round').modal('show');
+            }
         }
     }
 }
 
 // player must be a string 'red' or 'blue'
 function hideImage(player) {
-    let army = document.querySelectorAll(`.soldier.${player}`);
+    let army = document.querySelectorAll(`.game-cell .soldier.${player}`);
     for (let soldier of army) {
         soldier.classList.add('hide');
         soldier.setAttribute('src', '/static/images/stratego_logo.png')
@@ -390,7 +399,7 @@ function hideImage(player) {
 }
 
 function showImage(player) {
-    let army = document.querySelectorAll(`.soldier.${player}`);
+    let army = document.querySelectorAll(`.game-cell .soldier.${player}`);
     for (let soldier of army) {
         soldier.classList.remove('hide');
         soldier.setAttribute('src', `/static/images/soldier_${soldier.dataset.rank}.svg`);
