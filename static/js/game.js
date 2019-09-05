@@ -214,7 +214,7 @@ function isSpecial(attacker, target) {
 }
 
 function isValidMoveToCell (currentCell, currentPlayer) {
-    return currentCell &&
+    return currentCell && !currentCell.classList.contains('lake-cell') &&
         ((currentCell.children.length === 0) || (currentCell.children.length !== 0 && !currentCell.children[0].classList.contains(currentPlayer)))
 }
 
@@ -251,7 +251,7 @@ function markFieldsToMove () {
                     ];
 
         for (let cell of moveToCells) {
-            let currentCell = document.querySelector(`#board-${cell}`;
+            let currentCell = document.querySelector(`#board-${cell}`);
             if (isValidMoveToCell(currentCell, currentPlayer)) {
                 currentCell.classList.add('moveTo');
             }
@@ -343,21 +343,26 @@ function clickHandler(event) {
             let gameCell = document.querySelector(`#${event.currentTarget.id}`);
             gameCell.dataset.attacker = event.target.id;
             gameBoard.dataset.clickCounter = "1";
-            //markFieldsToMove()
+            markFieldsToMove();
         }
     } else if (gameBoard.dataset.clickCounter === "1") {
-        //event.currentTarget.classlist.contains('toMove')
-        if (!event.target.classList.contains(`${player}`)){
+        //event.currentTarget.classList.contains('toMove')
+        if (event.currentTarget.classList.contains('moveTo')){
             gameBoard.dataset.clickedCell2 = event.currentTarget.id;
             let gameCell = document.querySelector(`#${event.currentTarget.id}`);
             gameCell.dataset.enemy = event.target.id;
             moveSoldier(gameBoard.dataset.clickedCell1, gameBoard.dataset.clickedCell2);
+
             gameBoard.dataset.clickCounter = "0";
             gameBoard.dataset.clickedCell1 = "";
             gameBoard.dataset.clickedCell2 = "";
             delete gameCell.dataset.enemy;
             delete gameCell.dataset.attacker;
-            //asd querySelectorAll(".moveTo"), for classlistremove moveTo
+            const moveToFields = document.querySelectorAll('.moveTo');
+            for (let cell of moveToFields) {
+                cell.classList.remove('moveTo')
+            }
+
             //const currentEnemyName = document.querySelector(`[data-${currentEnemy}]`).dataset[currentEnemy];
             //round switch hideImage(player), querySelector("#next-player").innerHTML = `${nextplayername} is the next player`, $('#new-round').modal('show');
             const currentEnemy = player === 'red' ? 'blue' : 'red';
