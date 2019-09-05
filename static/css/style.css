@@ -3,7 +3,7 @@ body#main {
 }
 
 body#game {
-    background: white url("/static/images/game_background.png") no-repeat center bottom;
+    background: white;
 }
 
 h1 {
