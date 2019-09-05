@@ -185,18 +185,71 @@ function playGame() {
         cell.addEventListener('click', clickHandler);
     }
 }
+function putSoldierBackToInventory (cell, player) {
+        if (!String.prototype.trim) {//it help to compare innerhtml with empty string
+            String.prototype.trim = function () {
+                return this.replace(/^\s+|\s+$/, '');
+            };
+        }
+        if (player === "red") {
+            let inventory = document.querySelectorAll(".inv-blue-cell");
+            console.log(inventory);
+            for (let x of inventory) {
+                if (x.innerHTML.trim() === "") {
+                    x.innerHTML = cell.innerHTML;
+                    return console.log("done")
+                }
+            }
+        } else {
+            let inventory = document.querySelectorAll(".inv-red-cell");
+            console.log(inventory)
+            for (let x of inventory) {
+                if (x.innerHTML.trim() === "") {
+                    x.innerHTML = cell.innerHTML;
+                    return console.log("done")
+                }
+            }
 
-function moveSoldier(cell1, cell2) {
-    let gameCell1 = document.querySelector(`#${cell1}`);
-    let gameCell2 = document.querySelector(`#${cell2}`);
+        }
+}
+
+function moveSoldier(cellAttacker, cellEnemy) {
+    let gameCell1 = document.querySelector(`#${cellAttacker}`);
+    let gameCell2 = document.querySelector(`#${cellEnemy}`);
+    let gameBoard = document.querySelector("#game-board");
+    let player = gameBoard.dataset.currentPlayer;
+    const enemy = player === 'red' ? 'blue' : 'red';
     if (gameCell2.innerHTML !== "") {
+
         battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy);
         console.log(battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy));
+        console.log(cellAttacker, cellEnemy);
+
+        if (battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy) === "ATTACKER"){
+            let cellToMoveFrom = document.querySelector(`[id="${cellAttacker}"]`);
+            let cellToMoveTo = document.querySelector(`[id="${cellEnemy}"]`);
+            putSoldierBackToInventory(cellToMoveTo, player);
+            cellToMoveTo.innerHTML = cellToMoveFrom.innerHTML;
+            cellToMoveFrom.innerHTML = "";
+
+        } else if (battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy) === "ENEMY"){
+            let cellToMoveToInventory = document.querySelector(`[id="${cellAttacker}"]`);
+            putSoldierBackToInventory(cellToMoveToInventory, enemy);
+            cellToMoveToInventory.innerHTML = "";
+
+        } else if (battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy) === "DRAW") {
+            let cellToMoveFrom = document.querySelector(`[id="${cellAttacker}"]`);
+            let cellToMoveTo = document.querySelector(`[id="${cellEnemy}"]`);
+            putSoldierBackToInventory(cellToMoveFrom, enemy);
+            putSoldierBackToInventory(cellToMoveTo, player);
+            cellToMoveFrom.innerHTML = "";
+            cellToMoveTo.innerHTML = "";
+        }
 
         //put looser back to inventory, if draw both
     } else {
-        let cellToMoveFrom = document.querySelector(`[id="${cell1}"]`);
-        let cellToMoveTo = document.querySelector(`[id="${cell2}"]`);
+        let cellToMoveFrom = document.querySelector(`[id="${cellAttacker}"]`);
+        let cellToMoveTo = document.querySelector(`[id="${cellEnemy}"]`);
         if (!String.prototype.trim) {//it help to compare innerhtml with empty string
             String.prototype.trim = function () {
                 return this.replace(/^\s+|\s+$/, '');
@@ -238,26 +291,31 @@ function battle(attacker_id, target_id) {
         Player ${currentPlayerName} WON the game!`;
         $('#battle_message').modal('show');
         return [attacker_id]
+
     } else if (target_rank === attacker_rank) {
         document.querySelector('#battle_result').innerHTML = `
         It's a tie! Both player lost.`;
         $('#battle_message').modal('show');
-        return [attacker_id, target_id]
+        //return [attacker_id, target_id]
+        return "DRAW"
     } else if (attacker_rank > target_rank) {
         document.querySelector('#battle_result').innerHTML = `
         Player ${currentPlayerName} WON the battle!`;
         $('#battle_message').modal('show');
-        return [attacker_id]
+        //return [attacker_id]
+        return "ATTACKER"
     } else if (isSpecial(attacker_rank, target_rank)) {
         document.querySelector('#battle_result').innerHTML = `
         Player ${currentPlayerName} WON the battle!`;
         $('#battle_message').modal('show');
-        return [attacker_id]
+        //return [attacker_id]
+        return "ATTACKER"
     } else {
         document.querySelector('#battle_result').innerHTML = `
         Player ${currentEnemyName} WON battle!`;
         $('#battle_message').modal('show');
-        return [target_id]
+        //return [target_id]
+        return "ENEMY"
     }
 }
 
