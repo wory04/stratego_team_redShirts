@@ -77,32 +77,48 @@ function playGame() {
 }
 
 function moveSoldier(cell1, cell2) {
-    let cellToMoveFrom = document.querySelector(`[id="${cell1}"]`);
-    let cellToMoveTo = document.querySelector(`[id="${cell2}"]`);
-
-    if (!String.prototype.trim) {//it help to compare innerhtml with empty string
-    String.prototype.trim = function() { return this.replace(/^\s+|\s+$/, ''); };
-    }
-    if (cellToMoveTo.innerHTML.trim() === "") {
-        cellToMoveTo.innerHTML = cellToMoveFrom.innerHTML;
-        cellToMoveFrom.innerHTML = "";
+    let gameCell1 = document.querySelector(`#${cell1}`);
+    let gameCell2 = document.querySelector(`#${cell2}`);
+    if (gameCell2.innerHTML != "") {
+        console.log("LET THE BATTLE BEGIN")
+    } else {
+        let cellToMoveFrom = document.querySelector(`[id="${cell1}"]`);
+        let cellToMoveTo = document.querySelector(`[id="${cell2}"]`);
+        if (!String.prototype.trim) {//it help to compare innerhtml with empty string
+            String.prototype.trim = function () {
+                return this.replace(/^\s+|\s+$/, '');
+            };
+        }
+        if (cellToMoveTo.innerHTML.trim() === "") {
+            cellToMoveTo.innerHTML = cellToMoveFrom.innerHTML;
+            cellToMoveFrom.innerHTML = "";
+        }
     }
 }
 
 function clickHandler(event) {
     let gameBoard = document.querySelector( "#game-board");
+    let player = gameBoard.dataset.currentPlayer;
     if (gameBoard.dataset.clickCounter === "0") {
-        gameBoard.dataset.clickedCell1 = event.currentTarget.id;
-        console.log("THIS IS YOUR FIRST CHOICE");//.
-        gameBoard.dataset.clickCounter = "1";
+        if(event.target.classList.contains(`${player}`) && event.target.dataset.rank !== "0" && event.target.dataset.rank !== "11"){// need to implement restriction to bomb and flag 0 and 11
+            gameBoard.dataset.clickedCell1 = event.currentTarget.id;
+            let gameCell = document.querySelector(`#${event.currentTarget.id}`);
+            gameCell.dataset.attacker = event.target.id;
+            gameBoard.dataset.clickCounter = "1";
+        }
     } else if (gameBoard.dataset.clickCounter === "1") {
-        gameBoard.dataset.clickedCell2 = event.currentTarget.id;
-        console.log("THIS IS YOUR TARGET CELL");//.
-        console.log(gameBoard.dataset.clickedCell1, gameBoard.dataset.clickedCell2);//.
-        moveSoldier(gameBoard.dataset.clickedCell1, gameBoard.dataset.clickedCell2);
-        gameBoard.dataset.clickCounter = "0";
-        gameBoard.dataset.clickedCell1 = "";
-        gameBoard.dataset.clickedCell2 = "";
+        if (!event.target.classList.contains(`${player}`)){//cant step on your own player
+            gameBoard.dataset.clickedCell2 = event.currentTarget.id;
+            let gameCell = document.querySelector(`#${event.currentTarget.id}`);
+            gameCell.dataset.enemy = event.target.id;
+            moveSoldier(gameBoard.dataset.clickedCell1, gameBoard.dataset.clickedCell2);
+            gameBoard.dataset.clickCounter = "0";
+            gameBoard.dataset.clickedCell1 = "";
+            gameBoard.dataset.clickedCell2 = "";
+            delete gameCell.dataset.enemy;
+            delete gameCell.dataset.attacker;
+            //round switch
+        }
     }
 }
 
