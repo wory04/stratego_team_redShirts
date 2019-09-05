@@ -122,13 +122,14 @@ h1 {
 
 .players-name {
     font-size: 18pt;
-    text-align: right;
+    text-align: center;
     vertical-align: middle;
-    padding-top: 25%;
-    padding-right: 40%;
+    padding-top: 20%;
 }
 
 input {
     border-width: 0;
     opacity: 0.5;
+    margin: 5px;
+    text-align: center;
 }
