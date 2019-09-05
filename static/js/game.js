@@ -189,8 +189,11 @@ function playGame() {
 function moveSoldier(cell1, cell2) {
     let gameCell1 = document.querySelector(`#${cell1}`);
     let gameCell2 = document.querySelector(`#${cell2}`);
-    if (gameCell2.innerHTML != "") {
-        console.log("LET THE BATTLE BEGIN")
+    if (gameCell2.innerHTML !== "") {
+        battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy);
+        console.log(battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy));
+
+        //put looser back to inventory, if draw both
     } else {
         let cellToMoveFrom = document.querySelector(`[id="${cell1}"]`);
         let cellToMoveTo = document.querySelector(`[id="${cell2}"]`);
@@ -304,27 +307,27 @@ function battle(attacker_id, target_id) {
     `;
 
     if (target_rank === 0) {
-        document.querySelector('#battle-result').innerHTML = `
+        document.querySelector('#battle_result').innerHTML = `
         Player ${currentPlayerName} WON the game!`;
         $('#battle_message').modal('show');
         return [attacker_id]
     } else if (target_rank === attacker_rank) {
-        document.querySelector('#battle-result').innerHTML = `
+        document.querySelector('#battle_result').innerHTML = `
         It's a tie! Both player lost.`;
         $('#battle_message').modal('show');
         return [attacker_id, target_id]
     } else if (attacker_rank > target_rank) {
-        document.querySelector('#battle-result').innerHTML = `
+        document.querySelector('#battle_result').innerHTML = `
         Player ${currentPlayerName} WON the battle!`;
         $('#battle_message').modal('show');
         return [attacker_id]
     } else if (isSpecial(attacker_rank, target_rank)) {
-        document.querySelector('#battle-result').innerHTML = `
+        document.querySelector('#battle_result').innerHTML = `
         Player ${currentPlayerName} WON the battle!`;
         $('#battle_message').modal('show');
         return [attacker_id]
     } else {
-        document.querySelector('#battle-result').innerHTML = `
+        document.querySelector('#battle_result').innerHTML = `
         Player ${currentEnemyName} WON battle!`;
         $('#battle_message').modal('show');
         return [target_id]
@@ -340,9 +343,11 @@ function clickHandler(event) {
             let gameCell = document.querySelector(`#${event.currentTarget.id}`);
             gameCell.dataset.attacker = event.target.id;
             gameBoard.dataset.clickCounter = "1";
+            //markFieldsToMove()
         }
     } else if (gameBoard.dataset.clickCounter === "1") {
-        if (!event.target.classList.contains(`${player}`)) {//cant step on your own player
+        //event.currentTarget.classlist.contains('toMove')
+        if (!event.target.classList.contains(`${player}`)){
             gameBoard.dataset.clickedCell2 = event.currentTarget.id;
             let gameCell = document.querySelector(`#${event.currentTarget.id}`);
             gameCell.dataset.enemy = event.target.id;
@@ -352,7 +357,13 @@ function clickHandler(event) {
             gameBoard.dataset.clickedCell2 = "";
             delete gameCell.dataset.enemy;
             delete gameCell.dataset.attacker;
-            //round switch
+            //asd querySelectorAll(".moveTo"), for classlistremove moveTo
+            //const currentEnemyName = document.querySelector(`[data-${currentEnemy}]`).dataset[currentEnemy];
+            //round switch hideImage(player), querySelector("#next-player").innerHTML = `${nextplayername} is the next player`, $('#new-round').modal('show');
+            const currentEnemy = player === 'red' ? 'blue' : 'red';
+            hideImage(player);
+            document.querySelector("#next-player").innerHTML = `${currentEnemy} is the next player`;
+            $('#new-round').modal('show');
         }
     }
 }
@@ -388,6 +399,7 @@ function main() {
     setBackground();
     setLakes();
     setArmy();
+    playGame(); // KI KELL SZEDNI
 }
 
 main();
