@@ -236,7 +236,7 @@ function moveSoldier(cellAttacker, cellEnemy) {
     const enemy = player === 'red' ? 'blue' : 'red';
     if (gameCell2.innerHTML !== "") {
 
-        const battleResult = battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy);
+        let battleResult = battle(gameCell1.dataset.attacker, gameCell2.dataset.enemy);
 
         if (battleResult === "ATTACKER"){
             let cellToMoveFrom = document.querySelector(`[id="${cellAttacker}"]`);
@@ -405,6 +405,13 @@ function battle(attacker_id, target_id) {
     }
 }
 
+function removeMarksFromFieldsMoveTo() {
+    const moveToFields = document.querySelectorAll('.moveTo');
+    for (let cell of moveToFields) {
+        cell.classList.remove('moveTo')
+    }
+}
+
 function clickHandler(event) {
     let gameBoard = document.querySelector("#game-board");
     let player = gameBoard.dataset.currentPlayer;
@@ -420,7 +427,7 @@ function clickHandler(event) {
             }
         }
     } else if (gameBoard.dataset.clickCounter === "1") {
-        if (event.currentTarget.classList.contains('moveTo')){
+        if (event.currentTarget.classList.contains('moveTo')) {
             gameBoard.dataset.clickedCell2 = event.currentTarget.id;
             let gameCell = document.querySelector(`#${event.currentTarget.id}`);
             gameCell.dataset.enemy = event.target.id;
@@ -431,10 +438,7 @@ function clickHandler(event) {
             gameBoard.dataset.clickedCell2 = "";
             delete gameCell.dataset.enemy;
             delete gameCell.dataset.attacker;
-            const moveToFields = document.querySelectorAll('.moveTo');
-            for (let cell of moveToFields) {
-                cell.classList.remove('moveTo')
-            }
+            removeMarksFromFieldsMoveTo();
 
             const currentEnemy = player === 'red' ? 'blue' : 'red';
             const currentEnemyName = document.querySelector(`[data-${currentEnemy}]`).dataset[currentEnemy];
@@ -443,6 +447,9 @@ function clickHandler(event) {
             if (!document.querySelector('#battle_message').classList.contains('show')) {
                 $('#new-round').modal('show');
             }
+        } else if (gameBoard.dataset.clickCounter === "1" && event.target.id === event.currentTarget.children[0].id) {
+            gameBoard.dataset.clickCounter = "0";
+            removeMarksFromFieldsMoveTo();
         }
     }
 }
